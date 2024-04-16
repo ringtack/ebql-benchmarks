@@ -1,0 +1,7 @@
+[workspace]
+resolver = "2"
+
+members = [
+  "ebql-probe-pread-1",
+  "rocksdb-application",
+]

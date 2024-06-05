@@ -1,0 +1,41 @@
+
+utime: 20635	stime: 5345	ticks per second: 100	Program runtime: PT37.458327255S
+runtime ns: 17132239241	run count: 28981105	recursion misses: 0
+utime: 19905	stime: 5060	ticks per second: 100	Program runtime: PT35.645835722S
+runtime ns: 16080670547	run count: 28956666	recursion misses: 0
+utime: 19836	stime: 5248	ticks per second: 100	Program runtime: PT36.404611626S
+runtime ns: 16308471449	run count: 28971024	recursion misses: 0
+utime: 20087	stime: 5205	ticks per second: 100	Program runtime: PT36.360045022S
+runtime ns: 16568027353	run count: 28985888	recursion misses: 0
+utime: 20110	stime: 5341	ticks per second: 100	Program runtime: PT36.600695389S
+runtime ns: 16796890024	run count: 28997851	recursion misses: 0
+utime: 19927	stime: 5219	ticks per second: 100	Program runtime: PT36.465845616S
+runtime ns: 15959437349	run count: 28986986	recursion misses: 0
+utime: 20113	stime: 5357	ticks per second: 100	Program runtime: PT36.64239899S
+runtime ns: 16818409515	run count: 28984059	recursion misses: 0
+utime: 19857	stime: 5202	ticks per second: 100	Program runtime: PT36.072491657S
+runtime ns: 16283554078	run count: 28976542	recursion misses: 0
+utime: 20064	stime: 5277	ticks per second: 100	Program runtime: PT36.731747128S
+runtime ns: 15721626169	run count: 28973426	recursion misses: 0
+utime: 20263	stime: 5142	ticks per second: 100	Program runtime: PT36.630162672S
+runtime ns: 16109881147	run count: 28995233	recursion misses: 0
+utime: 19840	stime: 5171	ticks per second: 100	Program runtime: PT36.070233647S
+runtime ns: 16115271723	run count: 28970255	recursion misses: 0
+utime: 20287	stime: 5255	ticks per second: 100	Program runtime: PT36.799161301S
+runtime ns: 16576894291	run count: 28999639	recursion misses: 0
+utime: 19925	stime: 5219	ticks per second: 100	Program runtime: PT36.345966551S
+runtime ns: 16160027832	run count: 28968900	recursion misses: 0
+utime: 19811	stime: 5228	ticks per second: 100	Program runtime: PT35.925328534S
+runtime ns: 16436180795	run count: 28975118	recursion misses: 0
+utime: 19878	stime: 5227	ticks per second: 100	Program runtime: PT36.237201471S
+runtime ns: 16259972276	run count: 28990110	recursion misses: 0
+utime: 19961	stime: 5209	ticks per second: 100	Program runtime: PT36.447387738S
+runtime ns: 16713594990	run count: 28983727	recursion misses: 0
+utime: 20126	stime: 5023	ticks per second: 100	Program runtime: PT36.409206551S
+runtime ns: 16173147344	run count: 28989870	recursion misses: 0
+utime: 19792	stime: 5223	ticks per second: 100	Program runtime: PT36.158609537S
+runtime ns: 16356736932	run count: 28993425	recursion misses: 0
+utime: 20092	stime: 5065	ticks per second: 100	Program runtime: PT36.242091765S
+runtime ns: 16097261998	run count: 28982446	recursion misses: 0
+utime: 20110	stime: 5241	ticks per second: 100	Program runtime: PT36.484928867S
+runtime ns: 16954623287	run count: 28985882	recursion misses: 0

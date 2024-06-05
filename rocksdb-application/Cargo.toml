@@ -18,3 +18,5 @@ uuid = { version = "1.4.1", features = ["v4"] }
 memcache = "0.17.0"
 rocksdb = "0.22.0"
 serde = { version = "1.0.197", features = ["derive"] }
+procfs = { version = "0.16.0", features = ["chrono"] }
+common = { path = "../common" }

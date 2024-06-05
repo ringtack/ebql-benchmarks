@@ -58,7 +58,7 @@ struct {
   __type(value, agg_t);
   __uint(max_entries, AGG_MAX_ENTRIES);
   __uint(map_flags, BPF_F_NO_PREALLOC);
-} sum_count_pread_query SEC(".maps");
+} max_count_pread_query SEC(".maps");
 struct {
   __uint(type, BPF_MAP_TYPE_HASH);
   __type(key, group_by_pread_query_t);
@@ -149,14 +149,14 @@ static __always_inline void tumble_count__pread_query() {
   bpf_for_each_map_elem(&count__pread_query, __tumble_count__pread_query_callback, NULL, 0);
 }
 
-static __always_inline s32 insert_sum_count_pread_query(group_by_pread_query_t key, u64 val) {
+static __always_inline s32 insert_max_count_pread_query(group_by_pread_query_t key, u64 val) {
   s32 ret;
-  agg_t *agg = (agg_t *)bpf_map_lookup_elem(&sum_count_pread_query, &key);
+  agg_t *agg = (agg_t *)bpf_map_lookup_elem(&max_count_pread_query, &key);
   if (!agg) {
     agg_t init = {val};
-    ret = bpf_map_update_elem(&sum_count_pread_query, &key, &init, BPF_NOEXIST);
+    ret = bpf_map_update_elem(&max_count_pread_query, &key, &init, BPF_NOEXIST);
   } else {
-    sum(agg, val);
+    max(agg, val);
   }
   if (ret != 0) {
     ERROR("failed to insert into sum map: %d", ret);
@@ -168,12 +168,12 @@ typedef struct {
   pread_query_t *buf;
   u64 buf_sz;
   u64 count;
-} sum_count_pread_query_ctx_t;
+} max_count_pread_query_ctx_t;
 
-static __always_inline s64 __get_sum_count_pread_query_callback(struct bpf_map *map,
+static __always_inline s64 __get_max_count_pread_query_callback(struct bpf_map *map,
                                                            group_by_pread_query_t *key,
                                                            agg_t *agg,
-                                                           sum_count_pread_query_ctx_t *ctx) {
+                                                           max_count_pread_query_ctx_t *ctx) {
   // Skip if val is 0
   // TODO: migrate from val -> add count to agg_t
   if (agg->val == 0) {
@@ -190,17 +190,17 @@ static __always_inline s64 __get_sum_count_pread_query_callback(struct bpf_map *
   }
   ctx->buf[ctx->count].fd = key->fd;
   ctx->buf[ctx->count].cpu = key->cpu;
-  ctx->buf[ctx->count].sum_count = agg->val;
+  ctx->buf[ctx->count].max_count = agg->val;
   ctx->count += 1;
   return 0;
 }
 
-static __always_inline void get_sum_count_pread_query(pread_query_t *buf, u64 buf_sz) {
-  sum_count_pread_query_ctx_t ctx = {.buf = buf, .buf_sz = buf_sz, .count = 0};
-  bpf_for_each_map_elem(&sum_count_pread_query, __get_sum_count_pread_query_callback, &ctx, 0);
+static __always_inline void get_max_count_pread_query(pread_query_t *buf, u64 buf_sz) {
+  max_count_pread_query_ctx_t ctx = {.buf = buf, .buf_sz = buf_sz, .count = 0};
+  bpf_for_each_map_elem(&max_count_pread_query, __get_max_count_pread_query_callback, &ctx, 0);
 }
 
-static __always_inline u64 __count_sum_count_pread_query_callback(struct bpf_map *map,
+static __always_inline u64 __count_max_count_pread_query_callback(struct bpf_map *map,
                                                              group_by_pread_query_t *key,
                                                              agg_t *agg,
                                                              u64 *count) {
@@ -213,13 +213,13 @@ static __always_inline u64 __count_sum_count_pread_query_callback(struct bpf_map
   return 0;
 }
 
-static __always_inline u64 count_sum_count_pread_query() {
+static __always_inline u64 count_max_count_pread_query() {
   u64 count = 0;
-  bpf_for_each_map_elem(&sum_count_pread_query, __count_sum_count_pread_query_callback, &count, 0);
+  bpf_for_each_map_elem(&max_count_pread_query, __count_max_count_pread_query_callback, &count, 0);
   return count;
 }
 
-static __always_inline u64 __tumble_sum_count_pread_query_callback(struct bpf_map *map,
+static __always_inline u64 __tumble_max_count_pread_query_callback(struct bpf_map *map,
                                                              group_by_pread_query_t *key,
                                                              agg_t *agg,
                                                              void *ctx) {
@@ -227,8 +227,8 @@ static __always_inline u64 __tumble_sum_count_pread_query_callback(struct bpf_ma
   return 0;
 }
 
-static __always_inline void tumble_sum_count_pread_query() {
-  bpf_for_each_map_elem(&sum_count_pread_query, __tumble_sum_count_pread_query_callback, NULL, 0);
+static __always_inline void tumble_max_count_pread_query() {
+  bpf_for_each_map_elem(&max_count_pread_query, __tumble_max_count_pread_query_callback, NULL, 0);
 }
 
 static __always_inline s32 insert_avg_count_pread_query(group_by_pread_query_t key, u64 val) {

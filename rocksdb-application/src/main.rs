@@ -15,6 +15,7 @@ use std::{
 
 use chrono::{DateTime, Utc};
 use clap::Parser;
+use common::prog_stats::ProgStats;
 use crossbeam::channel::{bounded, Receiver, Sender};
 use lazy_static::lazy_static;
 use rand::prelude::*;
@@ -39,6 +40,9 @@ pub struct Args {
     #[arg(long)]
     quantiles_path: String,
 
+    #[arg(long, default_value_t = String::from(""))]
+    stats_path: String,
+
     #[arg(long)]
     db_path: String,
 
@@ -57,10 +61,10 @@ pub struct Args {
     #[arg(short, long, default_value_t = false)]
     setup_db: bool,
 
-    #[arg(short, long, default_value_t = 20_000_000)]
+    #[arg(short, long, default_value_t = 25_000_000)]
     num_ops: usize,
 
-    #[arg(long, default_value_t = 10)]
+    #[arg(long, default_value_t = 0)]
     delay_secs: u64,
 }
 
@@ -94,16 +98,6 @@ fn init_signal() {
 }
 
 lazy_static! {
-    // static ref ARGS: Args = {
-    //     match Args::try_parse() {
-    //         Ok(x) => x,
-    //         Err(x) => {
-    //             use clap::error::{DefaultFormatter, ErrorFormatter};
-    //             println!("Error: {}", DefaultFormatter::format_error(&x));
-    //             std::process::exit(1);
-    //         }
-    //     }
-    // };
     static ref START_TIME: Instant = Instant::now();
 }
 
@@ -352,6 +346,9 @@ fn main() {
         return;
     }
 
+    // Enable BPF stats collection
+    // bpf_stats::enable_bpf_stats().unwrap();
+
     // Otherwise, setup workers and start
     println!("PID: {}", process::id());
     init_signal();
@@ -359,6 +356,7 @@ fn main() {
 
     let delay_secs = args.delay_secs;
     let quantile_path = args.quantiles_path.clone();
+    let stats_path = args.stats_path.clone();
 
     let (stats_tx, stats_rx) = bounded(1024);
     setup_workers_existing_db(db_path, args, stats_tx);
@@ -403,5 +401,19 @@ fn main() {
     for percentile in &percentiles {
         let idx = (percentile * n) as usize;
         println!("{}, {}", percentile, stats[idx].duration_secs);
+    }
+
+    let stat = ProgStats::get();
+    println!(
+        "utime: {}\tstime: {}\tticks per second: {}\tProgram runtime: {}",
+        stat.utime, stat.stime, stat.clock_tps, stat.runtime,
+    );
+    if !stats_path.is_empty() {
+        let mut f = fs::OpenOptions::new()
+            .create(true)
+            .append(true)
+            .open(stats_path)
+            .unwrap();
+        write!(f, "{}\n", stat).unwrap();
     }
 }

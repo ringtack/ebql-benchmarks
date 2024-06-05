@@ -6,7 +6,9 @@ echo "-------------------------------------------------------------->//"
 
 cargo build --release \
   -p rocksdb-application \
-  -p ebql-probe-pread-1
+  -p ebpf-probe-pread
+  # -p bpf-stats-collector \
+
 
 echo "//<--------------------------------------------------------------"
 echo "Done Building"

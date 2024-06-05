@@ -1,0 +1,7 @@
+{
+  "files.associations": {
+    "*.js": "javascriptreact",
+    "pread_query.bpf.h": "c",
+    "common.bpf.h": "c"
+  }
+}
